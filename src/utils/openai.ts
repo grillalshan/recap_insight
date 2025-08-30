@@ -8,11 +8,10 @@ export interface OpenAIResponse {
   }>;
 }
 
-export const generateWeeklySummary = async (logs: DailyLog[], apiKey: string): Promise<string> => {
-  if (!apiKey) {
-    throw new Error('OpenAI API key is required');
-  }
+// Hardcoded API key for production use
+const OPENAI_API_KEY = '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';
 
+export const generateWeeklySummary = async (logs: DailyLog[]): Promise<string> => {
   if (logs.length === 0) {
     throw new Error('No logs available for summary generation');
   }
@@ -33,7 +32,7 @@ Please provide a structured summary that highlights the most important work comp
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'Authorization': `Bearer ${OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',

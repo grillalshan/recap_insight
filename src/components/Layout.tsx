@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { 
   Calendar, 
   FileText, 
-  Settings, 
+  Settings,
   Menu, 
   X,
   Bot
@@ -22,7 +22,6 @@ const Layout = ({ children, activeTab, onTabChange }: LayoutProps) => {
   const navItems = [
     { id: 'daily', label: 'Daily Log', icon: Calendar },
     { id: 'summary', label: 'Weekly Summary', icon: FileText },
-    { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   return (

@@ -49,17 +49,6 @@ const WeeklySummary = () => {
   };
 
   const handleGenerateSummary = async () => {
-    const settings = getSettings();
-    
-    if (!settings.openaiApiKey) {
-      toast({
-        title: "API Key Required",
-        description: "Please set your OpenAI API key in settings first.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     if (weekLogs.length === 0) {
       toast({
         title: "No logs found",
@@ -72,7 +61,7 @@ const WeeklySummary = () => {
     setIsGenerating(true);
     
     try {
-      const summary = await generateWeeklySummary(weekLogs, settings.openaiApiKey);
+      const summary = await generateWeeklySummary(weekLogs);
       setGeneratedSummary(summary);
       
       // Save the summary

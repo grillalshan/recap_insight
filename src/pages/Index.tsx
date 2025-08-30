@@ -1,13 +1,29 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import Layout from '@/components/Layout';
+import DailyLog from '@/components/DailyLog';
+import WeeklySummary from '@/components/WeeklySummary';
+import Settings from '@/components/Settings';
 
 const Index = () => {
+  const [activeTab, setActiveTab] = useState('daily');
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'daily':
+        return <DailyLog />;
+      case 'summary':
+        return <WeeklySummary />;
+      case 'settings':
+        return <Settings />;
+      default:
+        return <DailyLog />;
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <Layout activeTab={activeTab} onTabChange={setActiveTab}>
+      {renderContent()}
+    </Layout>
   );
 };
 

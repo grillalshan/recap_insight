@@ -59,32 +59,32 @@ const LandingPage = ({ onGetStarted }: LandingPageProps) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-secondary">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-primary">
-        <div className="absolute inset-0 bg-background/5" />
+      <section className="relative overflow-hidden bg-background border-b border-border">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
         <div className="relative max-w-7xl mx-auto px-6 py-20 lg:py-32">
           <div className="text-center">
             {/* Logo */}
             <div className="flex items-center justify-center gap-3 mb-8">
-              <div className="w-16 h-16 bg-primary-foreground/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                <Bot className="w-8 h-8 text-primary-foreground" />
+              <div className="w-16 h-16 bg-primary/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-primary/20">
+                <Bot className="w-8 h-8 text-primary" />
               </div>
-              <h1 className="text-4xl lg:text-5xl font-bold text-primary-foreground">
+              <h1 className="text-4xl lg:text-5xl font-bold text-foreground">
                 Recap.ai
               </h1>
             </div>
 
             {/* Hero Content */}
-            <h2 className="text-3xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
+            <h2 className="text-3xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
               Transform Daily Tasks Into
               <br />
-              <span className="bg-gradient-to-r from-primary-foreground to-primary-foreground/80 bg-clip-text text-transparent">
+              <span className="bg-gradient-primary bg-clip-text text-transparent">
                 Professional Reports
               </span>
             </h2>
             
-            <p className="text-xl lg:text-2xl text-primary-foreground/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
               The AI-powered productivity tool that helps employees log daily work and generate 
               impressive weekly summaries in seconds.
             </p>
@@ -93,7 +93,7 @@ const LandingPage = ({ onGetStarted }: LandingPageProps) => {
               <Button 
                 onClick={onGetStarted}
                 size="lg" 
-                variant="secondary"
+                variant="hero"
                 className="text-lg px-8 py-4 h-auto font-semibold"
               >
                 Get Started Free
@@ -102,13 +102,13 @@ const LandingPage = ({ onGetStarted }: LandingPageProps) => {
               <Button 
                 size="lg" 
                 variant="outline"
-                className="text-lg px-8 py-4 h-auto font-semibold border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
+                className="text-lg px-8 py-4 h-auto font-semibold"
               >
                 See How It Works
               </Button>
             </div>
 
-            <p className="text-primary-foreground/70 text-sm mt-4">
+            <p className="text-muted-foreground text-sm mt-4">
               No signup required • Powered by OpenAI GPT
             </p>
           </div>
@@ -149,7 +149,7 @@ const LandingPage = ({ onGetStarted }: LandingPageProps) => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 lg:py-32 bg-muted/30">
+      <section className="py-20 lg:py-32 bg-muted/20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -231,7 +231,7 @@ const LandingPage = ({ onGetStarted }: LandingPageProps) => {
           </div>
 
           <div className="relative">
-            <Card className="p-8 bg-gradient-secondary shadow-elegant">
+            <Card className="p-8 bg-card shadow-elegant border">
               <div className="space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-3 h-3 bg-accent rounded-full" />

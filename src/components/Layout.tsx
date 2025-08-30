@@ -21,7 +21,8 @@ const Layout = ({ children, activeTab, onTabChange }: LayoutProps) => {
 
   const navItems = [
     { id: 'daily', label: 'Daily Log', icon: Calendar },
-    { id: 'summary', label: 'Weekly Summary', icon: FileText },
+    { id: 'summaries', label: 'Generate Summaries', icon: FileText },
+    { id: 'manage', label: 'Manage Entries', icon: Settings },
   ];
 
   return (

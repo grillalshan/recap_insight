@@ -2,7 +2,8 @@ import { useState } from 'react';
 import LandingPage from '@/components/LandingPage';
 import Layout from '@/components/Layout';
 import DailyLog from '@/components/DailyLog';
-import WeeklySummary from '@/components/WeeklySummary';
+import GenerateSummaries from '@/components/GenerateSummaries';
+import ManageEntries from '@/components/ManageEntries';
 
 const Index = () => {
   const [showApp, setShowApp] = useState(false);
@@ -20,8 +21,10 @@ const Index = () => {
     switch (activeTab) {
       case 'daily':
         return <DailyLog />;
-      case 'summary':
-        return <WeeklySummary />;
+      case 'summaries':
+        return <GenerateSummaries />;
+      case 'manage':
+        return <ManageEntries />;
       default:
         return <DailyLog />;
     }

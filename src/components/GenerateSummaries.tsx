@@ -5,14 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { DailyLog, WeeklySummary as WeeklySummaryType } from '@/types';
-import { getLogsForWeek, saveWeeklySummary, getWeeklySummaries, formatDate, getSettings } from '@/utils/storage';
+import { getLogsForWeek, saveWeeklySummary, getWeeklySummaries, formatDate } from '@/utils/storage';
 import { generateWeeklySummary } from '@/utils/openai';
 import { cn } from '@/lib/utils';
 
-const WeeklySummary = () => {
+const GenerateSummaries = () => {
   const [selectedWeek, setSelectedWeek] = useState<Date>(new Date());
   const [weekLogs, setWeekLogs] = useState<DailyLog[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -127,28 +126,28 @@ const WeeklySummary = () => {
   const currentWeekSummary = savedSummaries.find(s => s.weekStart === formatDate(weekStart));
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
+    <div className="max-w-5xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Weekly Summary</h1>
-          <p className="text-muted-foreground mt-1">
-            Generate AI-powered summaries of your weekly work
+          <h1 className="text-3xl font-bold text-foreground">Generate Summaries</h1>
+          <p className="text-muted-foreground mt-2">
+            Create AI-powered summaries of your weekly work
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main summary area */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-6">
           {/* Week selector */}
           <Card className="p-6">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-4 mb-6">
               <Calendar className="w-5 h-5 text-primary" />
               <h2 className="text-lg font-semibold">Select Week</h2>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Button
                 variant="outline"
                 size="icon"
@@ -162,6 +161,7 @@ const WeeklySummary = () => {
                   <Button
                     variant="outline"
                     className="flex-1 justify-start text-left font-normal"
+                    size="lg"
                   >
                     <Calendar className="mr-2 h-4 w-4" />
                     Week of {format(weekStart, "MMM d")} - {format(weekEnd, "MMM d, yyyy")}
@@ -195,26 +195,30 @@ const WeeklySummary = () => {
 
           {/* Weekly logs preview */}
           <Card className="p-6">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-4 mb-6">
               <FileText className="w-5 h-5 text-primary" />
               <h2 className="text-lg font-semibold">Logs for This Week</h2>
-              <span className="text-sm text-muted-foreground">({weekLogs.length} entries)</span>
+              <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded">
+                {weekLogs.length} entries
+              </span>
             </div>
             
             {weekLogs.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">
-                No logs found for this week. Add some daily logs first.
-              </p>
+              <div className="text-center py-12">
+                <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground mb-2">No logs found for this week</p>
+                <p className="text-sm text-muted-foreground">Add some daily logs first to generate summaries</p>
+              </div>
             ) : (
-              <div className="space-y-3 max-h-60 overflow-y-auto">
+              <div className="space-y-4 max-h-80 overflow-y-auto">
                 {weekLogs.map((log) => (
-                  <div key={log.id} className="p-3 bg-muted/20 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium">
+                  <div key={log.id} className="p-4 bg-muted/30 rounded-lg border">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="font-medium text-foreground">
                         {format(new Date(log.date + 'T00:00:00'), 'EEEE, MMM d')}
                       </span>
                     </div>
-                    <p className="text-sm text-muted-foreground line-clamp-2">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {log.content}
                     </p>
                   </div>
@@ -225,7 +229,7 @@ const WeeklySummary = () => {
 
           {/* Generate summary */}
           <Card className="p-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
                 <Sparkles className="w-5 h-5 text-primary" />
                 <h2 className="text-lg font-semibold">AI Summary</h2>
@@ -235,6 +239,7 @@ const WeeklySummary = () => {
                 onClick={handleGenerateSummary}
                 disabled={isGenerating || weekLogs.length === 0}
                 variant="hero"
+                size="lg"
               >
                 {isGenerating ? (
                   <>
@@ -251,10 +256,10 @@ const WeeklySummary = () => {
             </div>
 
             {generatedSummary ? (
-              <div className="space-y-4">
-                <div className="p-4 bg-gradient-secondary rounded-lg border">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-medium text-muted-foreground">
+              <div className="space-y-6">
+                <div className="p-6 bg-gradient-secondary rounded-lg border">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-medium text-foreground">
                       Generated Summary
                     </span>
                     <Button
@@ -277,7 +282,7 @@ const WeeklySummary = () => {
                     </Button>
                   </div>
                   <div className="prose prose-sm max-w-none">
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">
                       {generatedSummary}
                     </p>
                   </div>
@@ -290,26 +295,31 @@ const WeeklySummary = () => {
                 )}
               </div>
             ) : (
-              <p className="text-muted-foreground text-center py-8">
-                Click "Generate Summary" to create an AI-powered weekly report
-              </p>
+              <div className="text-center py-12">
+                <Sparkles className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground mb-2">Ready to generate your summary</p>
+                <p className="text-sm text-muted-foreground">Click "Generate Summary" to create an AI-powered weekly report</p>
+              </div>
             )}
           </Card>
         </div>
 
-        {/* Saved summaries sidebar */}
-        <div className="space-y-4">
+        {/* Recent summaries sidebar */}
+        <div className="space-y-6">
           <Card className="p-6">
-            <h2 className="text-lg font-semibold mb-4">Saved Summaries</h2>
+            <h2 className="text-lg font-semibold mb-6">Recent Summaries</h2>
             
             {savedSummaries.length === 0 ? (
-              <p className="text-muted-foreground text-sm text-center py-8">
-                No summaries yet. Generate your first weekly summary!
-              </p>
+              <div className="text-center py-8">
+                <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground mb-2">No summaries yet</p>
+                <p className="text-xs text-muted-foreground">Generate your first weekly summary!</p>
+              </div>
             ) : (
-              <div className="space-y-3 max-h-96 overflow-y-auto">
+              <div className="space-y-4 max-h-96 overflow-y-auto">
                 {savedSummaries
                   .sort((a, b) => new Date(b.generatedAt).getTime() - new Date(a.generatedAt).getTime())
+                  .slice(0, 5)
                   .map((summary) => {
                     const weekStartDate = new Date(summary.weekStart + 'T00:00:00');
                     const weekEndDate = new Date(summary.weekEnd + 'T00:00:00');
@@ -318,16 +328,16 @@ const WeeklySummary = () => {
                     return (
                       <div
                         key={summary.weekStart}
-                        className="p-3 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors"
+                        className="p-4 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors"
                       >
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="font-medium text-foreground">
                             {format(weekStartDate, 'MMM d')} - {format(weekEndDate, 'MMM d')}
                           </span>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="w-6 h-6"
+                            className="w-7 h-7"
                             onClick={() => handleCopyToClipboard(summary.summary, summaryKey)}
                             disabled={copiedStates[summaryKey]}
                           >
@@ -338,10 +348,10 @@ const WeeklySummary = () => {
                             )}
                           </Button>
                         </div>
-                        <p className="text-xs text-muted-foreground line-clamp-3">
+                        <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
                           {summary.summary}
                         </p>
-                        <p className="text-xs text-muted-foreground mt-2">
+                        <p className="text-xs text-muted-foreground mt-3">
                           {format(new Date(summary.generatedAt), 'MMM d, yyyy')}
                         </p>
                       </div>
@@ -356,4 +366,4 @@ const WeeklySummary = () => {
   );
 };
 
-export default WeeklySummary;
+export default GenerateSummaries;
